@@ -1,0 +1,190 @@
+﻿@model List<ClinicAppointmentMVC.Models.Appointment>
+
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="appointments-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="appointments-header">
+
+        <div>
+
+            <span class="dashboard-label">
+                MEDIFLOW
+            </span>
+
+            <h1>My Appointments</h1>
+
+            <p>
+                View and manage your clinic appointments.
+            </p>
+
+        </div>
+
+        <a asp-controller="Appointment"
+           asp-action="Book"
+           class="btn-primary">
+
+            + Book Appointment
+
+        </a>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="success-message">
+
+            ✓ @TempData["Success"]
+
+        </div>
+    }
+
+
+    <!-- NO APPOINTMENTS -->
+    @if (Model.Count == 0)
+    {
+        <div class="empty-appointment">
+
+            <div class="empty-icon">
+                📅
+            </div>
+
+            <h3>No appointments yet</h3>
+
+            <p>
+                You have not booked an appointment.
+            </p>
+
+            <a asp-action="Book"
+               class="btn-primary">
+
+                Book Appointment
+
+            </a>
+
+        </div>
+    }
+
+    else
+    {
+        <!-- APPOINTMENT LIST -->
+
+        <div class="appointments-list">
+
+            @foreach (var appointment in Model)
+            {
+                <div class="appointment-card">
+
+                    <!-- DATE -->
+
+                    <div class="appointment-date">
+
+                        <span>
+                            @(appointment.AppointmentDate.ToString("MMM"))
+                        </span>
+
+                        <strong>
+                            @(appointment.AppointmentDate.ToString("dd"))
+                        </strong>
+
+                    </div>
+
+
+                    <!-- APPOINTMENT INFORMATION -->
+
+                    <div class="appointment-details">
+
+                        <h3>
+                            @(appointment.Service?.ServiceName
+                                                ?? "Clinic Appointment")
+                                                                    </h3>
+
+
+                        <p>
+                            Dr.
+                            @(appointment.Doctor?.Name ?? "")
+                            @(appointment.Doctor?.Surname ?? "")
+                        </p>
+
+
+                        <span class="appointment-time">
+
+                            🕐
+
+                            @(DateTime.Today
+                                                .Add(appointment.AppointmentTime)
+                                                .ToString("HH:mm"))
+
+                </span>
+
+                    </div>
+
+
+                    <!-- STATUS + CANCEL -->
+
+                    <div class="appointment-actions">
+
+                @if (appointment.Status == "Cancelled")
+                        {
+                            <span class="appointment-status status-cancelled">
+                                Cancelled
+                            </span>
+                        }
+                        else if (appointment.Status == "Completed")
+                        {
+                            <span class="appointment-status status-completed">
+                                Completed
+                            </span>
+                        }
+                        else if (appointment.Status == "Confirmed")
+                        {
+                            <span class="appointment-status status-confirmed">
+                                Confirmed
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="appointment-status status-pending">
+                                Pending
+                            </span>
+                        }
+
+
+                        @if (appointment.Status != "Cancelled"
+                                        && appointment.Status != "Completed")
+                        {
+                            <form asp-action="Cancel"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@appointment.AppointmentID" />
+
+                                <button type="submit"
+                                        class="cancel-button"
+                                        onclick="return confirm('Are you sure you want to cancel this appointment?');">
+
+                                    Cancel
+
+                                </button>
+
+                            </form>
+                        }
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

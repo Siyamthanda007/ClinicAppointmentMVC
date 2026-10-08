@@ -1,0 +1,135 @@
+﻿@model ClinicAppointmentMVC.Models.Doctor
+
+@{
+    ViewData["Title"] = "Doctor / Clinic Registration";
+}
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <div class="register-header">
+
+            <div class="register-icon">👨‍⚕️</div>
+
+            <h1>Doctor / Clinic Registration</h1>
+
+            <p>
+                Create your clinic account
+            </p>
+
+        </div>
+
+        <form asp-controller="Account"
+              asp-action="DoctorRegister"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="register-error">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name">First Name</label>
+
+                <input asp-for="Name"
+                       class="login-input"
+                       placeholder="Enter first name" />
+
+                <span asp-validation-for="Name"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Surname">Surname</label>
+
+                <input asp-for="Surname"
+                       class="login-input"
+                       placeholder="Enter surname" />
+
+                <span asp-validation-for="Surname"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Specialisation">
+                    Specialisation
+                </label>
+
+                <input asp-for="Specialisation"
+                       class="login-input"
+                       placeholder="e.g. General Practitioner" />
+
+                <span asp-validation-for="Specialisation"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone">
+                    Phone Number
+                </label>
+
+                <input asp-for="Phone"
+                       class="login-input"
+                       placeholder="Enter phone number" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email">
+                    Email Address
+                </label>
+
+                <input asp-for="Email"
+                       type="email"
+                       class="login-input"
+                       placeholder="Enter clinic email" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">
+                    Password
+                </label>
+
+                <input asp-for="Password"
+                       type="password"
+                       class="login-input"
+                       placeholder="Create a password" />
+
+                <span asp-validation-for="Password"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <button type="submit"
+                    class="login-button">
+
+                Create Doctor / Clinic Account
+
+            </button>
+
+        </form>
+
+        <div class="register-login-link">
+
+            Already have an account?
+
+            <a asp-controller="Account"
+               asp-action="Login">
+                Sign In
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

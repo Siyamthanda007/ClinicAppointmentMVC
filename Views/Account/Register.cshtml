@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <div class="register-header">
+
+            <div class="register-icon">🏥</div>
+
+            <h1>Create Account</h1>
+
+            <p>
+                Choose your account type to get started
+            </p>
+
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="register-error">
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="account-type-section">
+
+            <label class="account-type-title">
+                I want to register as
+            </label>
+
+            <div class="account-type-options">
+
+                <!-- PATIENT -->
+
+                <a asp-controller="Account"
+                   asp-action="PatientRegister"
+                   class="account-type-card">
+
+                    <div class="account-type-icon">
+                        👤
+                    </div>
+
+                    <div class="account-type-content">
+
+                        <h3>Patient</h3>
+
+                        <p>
+                            Create an account to book and
+                            manage clinic appointments.
+                        </p>
+
+                    </div>
+
+                    <span class="account-type-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- DOCTOR / CLINIC -->
+
+                <a asp-controller="Account"
+                   asp-action="DoctorRegister"
+                   class="account-type-card">
+
+                    <div class="account-type-icon">
+                        👨‍⚕️
+                    </div>
+
+                    <div class="account-type-content">
+
+                        <h3>Doctor / Clinic</h3>
+
+                        <p>
+                            Create a clinic account to manage
+                            patients and appointments.
+                        </p>
+
+                    </div>
+
+                    <span class="account-type-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="register-login-link">
+
+            Already have an account?
+
+            <a asp-controller="Account"
+               asp-action="Login">
+                Sign In
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

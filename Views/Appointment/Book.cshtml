@@ -1,0 +1,265 @@
+﻿@model ClinicAppointmentMVC.ViewModels.AppointmentViewModel
+
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+
+<div class="booking-page">
+
+    <div class="booking-header">
+
+        <div>
+            <span class="dashboard-label">
+                MEDIFLOW APPOINTMENTS
+            </span>
+
+            <h1>Book an Appointment</h1>
+
+            <p>
+                Choose your doctor, service, date and time.
+            </p>
+        </div>
+
+        <a asp-controller="Dashboard"
+           asp-action="Index"
+           class="back-button">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="booking-layout">
+
+        <div class="booking-card">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="error-message">
+            </div>
+
+
+            <form asp-controller="Appointment"
+                  asp-action="Book"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- DOCTOR -->
+
+                <div class="form-group">
+
+                    <label asp-for="DoctorID">
+                        Choose Doctor
+                    </label>
+
+                    @if (Model.Doctors.Any())
+                    {
+                        <select asp-for="DoctorID"
+                                asp-items="Model.Doctors"
+                                class="form-control">
+
+                            <option value="">
+                                Select a doctor
+                            </option>
+
+                        </select>
+                    }
+                    else
+                    {
+                        <div class="no-doctors-message">
+                            No doctors are currently registered.
+                            Please check again later.
+                        </div>
+                    }
+
+                    <span asp-validation-for="DoctorID"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- SERVICE -->
+
+                <div class="booking-field">
+
+                    <label asp-for="ServiceID">
+                        Choose Service
+                    </label>
+
+                    <select asp-for="ServiceID"
+                            asp-items="Model.Services">
+
+                        <option value="">
+                            Select a service
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="ServiceID"
+                          class="validation">
+                    </span>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="booking-field">
+
+                    <label asp-for="AppointmentDate">
+                        Appointment Date
+                    </label>
+
+                    <input asp-for="AppointmentDate"
+                           type="date"
+                           min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+
+                    <span asp-validation-for="AppointmentDate"
+                          class="validation">
+                    </span>
+
+                </div>
+
+
+                <!-- TIME -->
+
+                <div class="booking-field">
+
+                    <label asp-for="AppointmentTime">
+                        Appointment Time
+                    </label>
+
+                    <select asp-for="AppointmentTime">
+
+                        <option value="00:00:00">
+                            Select a time
+                        </option>
+
+                        <option value="08:00:00">
+                            08:00
+                        </option>
+
+                        <option value="08:30:00">
+                            08:30
+                        </option>
+
+                        <option value="09:00:00">
+                            09:00
+                        </option>
+
+                        <option value="09:30:00">
+                            09:30
+                        </option>
+
+                        <option value="10:00:00">
+                            10:00
+                        </option>
+
+                        <option value="10:30:00">
+                            10:30
+                        </option>
+
+                        <option value="11:00:00">
+                            11:00
+                        </option>
+
+                        <option value="11:30:00">
+                            11:30
+                        </option>
+
+                        <option value="13:00:00">
+                            13:00
+                        </option>
+
+                        <option value="13:30:00">
+                            13:30
+                        </option>
+
+                        <option value="14:00:00">
+                            14:00
+                        </option>
+
+                        <option value="14:30:00">
+                            14:30
+                        </option>
+
+                        <option value="15:00:00">
+                            15:00
+                        </option>
+
+                        <option value="15:30:00">
+                            15:30
+                        </option>
+
+                        <option value="16:00:00">
+                            16:00
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="AppointmentTime"
+                          class="validation">
+                    </span>
+
+                </div>
+
+
+                <button type="submit"
+                        class="booking-button">
+
+                    BOOK APPOINTMENT
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- INFORMATION CARD -->
+
+        <div class="booking-info">
+
+            <div class="booking-info-icon">
+                +
+            </div>
+
+            <h2>Before you book</h2>
+
+            <p>
+                Please make sure your appointment
+                details are correct before confirming.
+            </p>
+
+            <div class="booking-rule">
+                <span>✓</span>
+                Select your preferred doctor.
+            </div>
+
+            <div class="booking-rule">
+                <span>✓</span>
+                Choose the service you need.
+            </div>
+
+            <div class="booking-rule">
+                <span>✓</span>
+                Select a future appointment date.
+            </div>
+
+            <div class="booking-rule">
+                <span>✓</span>
+                Choose an available time.
+            </div>
+
+            <div class="booking-rule">
+                <span>✓</span>
+                Duplicate bookings are prevented.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,394 @@
+﻿@model ClinicAppointmentMVC.ViewModels.DoctorDashboardViewModel
+
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<div class="doctor-dashboard">
+
+    <!-- HEADER -->
+
+    <div class="doctor-welcome">
+
+        <div>
+            <h1>
+                Good morning, Dr. @(Model.Doctor?.Name ?? "")
+                👋
+            </h1>
+
+            <p>
+                Manage your appointments and patients
+            </p>
+        </div>
+
+        <div class="doctor-specialisation">
+            🩺 @(Model.Doctor?.Specialisation ?? "Doctor")
+        </div>
+
+    </div>
+
+
+    <!-- SUCCESS / ERROR MESSAGE -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="doctor-alert success">
+            ✓ @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="doctor-alert error">
+            ⚠ @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- STAT CARDS -->
+
+    <div class="doctor-stats">
+
+        <div class="doctor-stat-card pending">
+
+            <div class="doctor-stat-icon">
+                🟡
+            </div>
+
+            <div>
+                <span>Pending</span>
+                <strong>
+                    @Model.PendingAppointments
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="doctor-stat-card confirmed">
+
+            <div class="doctor-stat-icon">
+                🔵
+            </div>
+
+            <div>
+                <span>Confirmed</span>
+                <strong>
+                    @Model.ConfirmedAppointments
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="doctor-stat-card completed">
+
+            <div class="doctor-stat-icon">
+                🟢
+            </div>
+
+            <div>
+                <span>Completed</span>
+                <strong>
+                    @Model.CompletedAppointments
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="doctor-stat-card cancelled">
+
+            <div class="doctor-stat-icon">
+                🔴
+            </div>
+
+            <div>
+                <span>Cancelled</span>
+                <strong>
+                    @Model.CancelledAppointments
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- APPOINTMENTS -->
+
+    <div class="doctor-appointments-section">
+
+        <div class="doctor-section-header">
+
+            <div>
+                <h2>Appointments</h2>
+
+                <p>
+                    View and manage your patient appointments
+                </p>
+            </div>
+
+            <div class="appointment-count">
+                @Model.Appointments.Count appointments
+            </div>
+
+        </div>
+
+
+        @if (Model.Appointments.Any())
+        {
+            <div class="doctor-appointment-list">
+
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <div class="doctor-appointment-card">
+
+                        <!-- PATIENT -->
+
+                        <div class="doctor-patient">
+
+                            <div class="patient-avatar">
+                                👤
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    @(appointment.Patient?.Name ?? "")
+                                    @(appointment.Patient?.Surname ?? "")
+                                </h3>
+
+                                <p>
+                                    Patient
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DATE -->
+
+                        <div class="doctor-appointment-detail">
+
+                            <span class="detail-label">
+                                DATE
+                            </span>
+
+                            <strong>
+                                @appointment.AppointmentDate.ToString("dd MMM yyyy")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- TIME -->
+
+                        <div class="doctor-appointment-detail">
+
+                            <span class="detail-label">
+                                TIME
+                            </span>
+
+                            <strong>
+                                @DateTime.Today
+                                .Add(appointment.AppointmentTime)
+                                .ToString("HH:mm")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- SERVICE -->
+
+                        <div class="doctor-appointment-detail">
+
+                            <span class="detail-label">
+                                SERVICE
+                            </span>
+
+                            <strong>
+                                @(appointment.Service?.ServiceName
+                                                        ?? "Clinic Appointment")
+                    </strong>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="doctor-status-area">
+
+                    @if (appointment.Status == "Pending")
+                            {
+                                <span class="doctor-status pending">
+                                    Pending
+                                </span>
+                            }
+                            else if (appointment.Status == "Confirmed")
+                            {
+                                <span class="doctor-status confirmed">
+                                    Confirmed
+                                </span>
+                            }
+                            else if (appointment.Status == "Completed")
+                            {
+                                <span class="doctor-status completed">
+                                    Completed
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="doctor-status cancelled">
+                                    Cancelled
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="doctor-actions">
+
+                            @if (appointment.Status == "Pending")
+                            {
+                                <form asp-controller="Doctor"
+                                      asp-action="UpdateStatus"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@appointment.AppointmentID" />
+
+                                    <input type="hidden"
+                                           name="status"
+                                           value="Confirmed" />
+
+                                    <button type="submit"
+                                            class="status-button confirm-button">
+
+                                        ✓ Confirm
+
+                                    </button>
+
+                                    @Html.AntiForgeryToken()
+
+                                </form>
+
+                                <form asp-controller="Doctor"
+                                      asp-action="UpdateStatus"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@appointment.AppointmentID" />
+
+                                    <input type="hidden"
+                                           name="status"
+                                           value="Cancelled" />
+
+                                    <button type="submit"
+                                            class="status-button cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+                                    @Html.AntiForgeryToken()
+
+                                </form>
+                            }
+
+                            else if (appointment.Status == "Confirmed")
+                            {
+                                <form asp-controller="Doctor"
+                                      asp-action="UpdateStatus"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@appointment.AppointmentID" />
+
+                                    <input type="hidden"
+                                           name="status"
+                                           value="Completed" />
+
+                                    <button type="submit"
+                                            class="status-button complete-button">
+
+                                        ✓ Mark Completed
+
+                                    </button>
+
+                                    @Html.AntiForgeryToken()
+
+                                </form>
+
+                                <form asp-controller="Doctor"
+                                      asp-action="UpdateStatus"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@appointment.AppointmentID" />
+
+                                    <input type="hidden"
+                                           name="status"
+                                           value="Cancelled" />
+
+                                    <button type="submit"
+                                            class="status-button cancel-button">
+
+                                        Cancel
+
+                                    </button>
+
+                                    @Html.AntiForgeryToken()
+
+                                </form>
+                            }
+
+                            else if (appointment.Status == "Completed")
+                            {
+                                <span class="appointment-finished">
+                                    ✓ Appointment completed
+                                </span>
+                            }
+
+                            else
+                            {
+                                <span class="appointment-finished">
+                                    Appointment cancelled
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-doctor-appointments">
+
+                <div class="empty-icon">
+                    📅
+                </div>
+
+                <h3>
+                    No appointments yet
+                </h3>
+
+                <p>
+                    Your patient appointments will appear here.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

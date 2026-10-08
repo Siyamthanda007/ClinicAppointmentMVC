@@ -1,0 +1,218 @@
+﻿@model ClinicAppointmentMVC.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="patient-dashboard">
+
+    <!-- =========================================
+         GREETING
+         ========================================= -->
+
+    <div class="dashboard-welcome">
+
+        <h1>
+            Good afternoon, Patient 👋
+        </h1>
+
+        <p>
+            Your healthcare at a glance
+        </p>
+
+    </div>
+
+
+    <!-- =========================================
+         APPOINTMENT STATISTICS
+         ========================================= -->
+
+    <div class="dashboard-stats">
+
+        <!-- UPCOMING -->
+
+        <div class="stat-card upcoming-card">
+
+            <div class="stat-label">
+                Upcoming
+            </div>
+
+            <div class="stat-number">
+                @Model.UpcomingAppointments
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETED -->
+
+        <div class="stat-card completed-card">
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div class="stat-number">
+                @Model.CompletedAppointments
+            </div>
+
+        </div>
+
+
+        <!-- CANCELLED -->
+
+        <div class="stat-card cancelled-card">
+
+            <div class="stat-label">
+                Cancelled
+            </div>
+
+            <div class="stat-number">
+                @Model.CancelledAppointments
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         BOOK APPOINTMENT
+         ========================================= -->
+
+    <div class="dashboard-action">
+
+        <a asp-controller="Appointment"
+           asp-action="Book"
+           class="book-appointment-button">
+
+            <span class="book-icon">
+                +
+            </span>
+
+            <span>
+                Book Appointment
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         UPCOMING APPOINTMENT
+         ========================================= -->
+
+    <div class="upcoming-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Upcoming Appointment
+            </h2>
+
+        </div>
+
+
+        @if (Model.NextAppointment != null)
+        {
+            var appointment = Model.NextAppointment;
+
+            <div class="dashboard-appointment-card">
+
+                <!-- APPOINTMENT DETAILS -->
+
+                <div class="dashboard-appointment-info">
+
+                    <h3>
+
+                        Dr.
+                        @(appointment.Doctor?.Name ?? "")
+                        @(appointment.Doctor?.Surname ?? "")
+
+                        <span class="appointment-divider">
+                            •
+                        </span>
+
+                        @(appointment.Service?.ServiceName
+                                            ?? "Clinic Appointment")
+
+                    </h3>
+
+
+                    <p>
+
+                        @(appointment.AppointmentDate.ToString("dd MMMM yyyy"))
+
+                        <span class="appointment-divider">
+                            •
+                        </span>
+
+                        @(DateTime.Today
+                                            .Add(appointment.AppointmentTime)
+                                            .ToString("HH:mm"))
+
+                </p>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="dashboard-status">
+
+                @if (appointment.Status == "Confirmed")
+                    {
+                        <span class="dashboard-status-badge confirmed">
+                            Confirmed
+                        </span>
+                    }
+                    else if (appointment.Status == "Completed")
+                    {
+                        <span class="dashboard-status-badge completed">
+                            Completed
+                        </span>
+                    }
+                    else if (appointment.Status == "Cancelled")
+                    {
+                        <span class="dashboard-status-badge cancelled">
+                            Cancelled
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="dashboard-status-badge pending">
+                            Pending
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="no-upcoming-appointment">
+
+                <div class="no-appointment-icon">
+                    📅
+                </div>
+
+                <div>
+
+                    <h3>
+                        No upcoming appointments
+                    </h3>
+
+                    <p>
+                        You currently have no upcoming appointments.
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
